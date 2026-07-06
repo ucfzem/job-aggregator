@@ -15,17 +15,17 @@ export const metadata: Metadata = {
   description: "Search jobs from 348K+ sources.",
 }
 
-function getLangFromCookie(): Lang {
+async function getLangFromCookie(): Promise<Lang> {
   try {
-    const c = cookies()
+    const c = await cookies()
     const v = c.get("lang")?.value
     if (v && ["en","fr","es","ar"].includes(v)) return v as Lang
   } catch {}
   return "fr"
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const lang = getLangFromCookie()
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const lang = await getLangFromCookie()
   const dir = lang === "ar" ? "rtl" : "ltr"
 
   return (
