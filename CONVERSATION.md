@@ -32,4 +32,15 @@
 
 ### Deploy
 - Vercel: https://job-aggregator-57brm3x6g-ucfzem-s-projects.vercel.app
+- GitHub Pages redirect: https://ucfzem.github.io/job-aggregator/
 - GitHub: https://github.com/ucfzem/job-aggregator
+
+### Bug Fixes (7)
+1. **Language cookie sync** — LanguageProvider now writes `lang` cookie so server components can read it
+2. **Job detail i18n** — reads lang from cookie via `cookies()`, not hardcoded `"fr"`
+3. **RTL/lang restore on reload** — `applyLangAttr()` called on mount, not just on language change
+4. **FOUC theme flash** — inline `<script>` in `<head>` applies `dark` class before React mounts
+5. **noopener noreferrer** — added to all external `target="_blank"` links (JobCard + JobDetail)
+6. **Client-side pagination** — uses `router.push()` with `{ scroll: false }` instead of `window.location.href`
+7. **Header/footer i18n** — "Search Jobs" nav and "Powered by" footer use `t(lang, ...)` instead of hardcoded English
+8. **invalid brown-700** — ThemeToggle moon icon uses `text-foreground/70` instead of nonexistent Tailwind class
