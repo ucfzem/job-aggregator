@@ -31,5 +31,5 @@
 - All UI components updated with theme-aware classes + i18n hooks
 
 ### Deploy
-- Vercel: https://job-aggregator-iy9say5i7-ucfzem-s-projects.vercel.app
+- Vercel: https://job-aggregator-57brm3x6g-ucfzem-s-projects.vercel.app
 - GitHub: https://github.com/ucfzem/job-aggregator
