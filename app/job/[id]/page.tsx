@@ -4,8 +4,9 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { MapPin, DollarSign, Clock, Globe, ExternalLink, ArrowLeft, Building2 } from "lucide-react"
-export default async function JobDetailPage({ params }: { params: { id: string } }) {
-  const job = await getJobById(params.id)
+export default async function JobDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const job = await getJobById(id)
   if (!job) return <main className="max-w-4xl mx-auto px-4 py-16 text-center"><h1 className="text-2xl font-bold mb-4">Job Not Found</h1><p className="text-gray-600 mb-8">This job may have expired.</p><Link href="/jobs"><Button>Back to Search</Button></Link></main>
   const daysAgo = Math.floor((Date.now() - new Date(job.posted_at).getTime()) / 86400000)
   const salaryDisplay = job.salary_min && job.salary_max ? `$${(job.salary_min/1000).toFixed(0)}k - $${(job.salary_max/1000).toFixed(0)}k` : "Salary not disclosed"
