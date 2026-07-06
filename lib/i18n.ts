@@ -51,8 +51,6 @@ const translations: Record<Lang, Dict> = {
     "job.details": "Details",
     "job.previous": "Previous",
     "job.next": "Next",
-    "job.previous": "Previous",
-    "job.next": "Next",
     "job.not_found": "Job Not Found",
     "job.expired": "This job may have expired.",
     "job.back_search": "Back to Search",
