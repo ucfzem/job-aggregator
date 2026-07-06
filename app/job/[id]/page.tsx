@@ -9,13 +9,13 @@ import { t, type Lang } from "@/lib/i18n"
 function getLangFromCookie(cookie: string): Lang {
   const match = cookie?.match(/lang=(\w+)/)
   if (match && ["en","fr","es","ar"].includes(match[1])) return match[1] as Lang
-  return "en"
+  return "fr"
 }
 
 export default async function JobDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const job = await getJobById(id)
-  const lang = "en"
+  const lang = "fr"
   if (!job) return <main className="max-w-4xl mx-auto px-4 py-16 text-center"><h1 className="text-2xl font-bold mb-4">{t(lang,"job.not_found")}</h1><p className="text-muted-foreground mb-8">{t(lang,"job.expired")}</p><Link href="/jobs"><Button>{t(lang,"job.back_search")}</Button></Link></main>
   const daysAgo = Math.floor((Date.now() - new Date(job.posted_at).getTime()) / 86400000)
   const salaryDisplay = job.salary_min && job.salary_max ? `$${(job.salary_min/1000).toFixed(0)}k - $${(job.salary_max/1000).toFixed(0)}k` : t(lang,"job.salary_hidden")

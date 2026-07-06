@@ -7,7 +7,7 @@ const LangContext = createContext<{ lang: Lang; setLang: (l: Lang) => void }>({ 
 export function useLanguage() { return useContext(LangContext) }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("en")
+  const [lang, setLangState] = useState<Lang>("fr")
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {

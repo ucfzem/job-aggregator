@@ -11,7 +11,7 @@ async function getLang(): Promise<Lang> {
     const v = c.get("lang")?.value as Lang
     if (v && ["en","fr","es","ar"].includes(v)) return v
   } catch {}
-  return "en"
+  return "fr"
 }
 
 export default async function JobsPage(props: { searchParams: Promise<{ q?: string; location?: string; remote?: string; salaryMin?: string; salaryMax?: string; days?: string; seniority?: string; page?: string }> }) {
