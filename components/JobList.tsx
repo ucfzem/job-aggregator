@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import { JobCard } from "./JobCard"
 import { Button } from "@/components/ui/button"
 import { Loader2, AlertCircle } from "lucide-react"
@@ -13,8 +13,11 @@ export function JobList({ searchParams }: { searchParams: any }) {
   const [error, setError] = useState<string|null>(null)
   const [page, setPage] = useState(parseInt(searchParams.page||"1"))
   const sp = useSearchParams()
+  const router = useRouter()
   const { lang } = useLanguage()
+
   useEffect(()=>{setPage(parseInt(searchParams.page||"1"))},[searchParams.page])
+
   useEffect(()=>{
     async function fetchJobs() {
       setLoading(true);setError(null)
@@ -28,6 +31,13 @@ export function JobList({ searchParams }: { searchParams: any }) {
     }
     fetchJobs()
   },[searchParams,page])
+
+  function goToPage(p: number) {
+    const next = new URLSearchParams(sp.toString())
+    next.set("page", String(p))
+    router.push(`/jobs?${next.toString()}`, { scroll: false })
+  }
+
   if(loading)return <div className="flex flex-col items-center py-16"><Loader2 className="w-8 h-8 animate-spin text-primary mb-4"/><p className="text-muted-foreground">{t(lang,"job.searching")}</p></div>
   if(error)return <div className="flex flex-col items-center py-16"><AlertCircle className="w-8 h-8 text-red-500 mb-4"/><p className="text-red-500 font-medium">{error}</p></div>
   if(jobs.length===0)return <div className="flex flex-col items-center py-16"><p className="text-muted-foreground text-lg">{t(lang,"job.none")}</p><p className="text-muted-foreground/60 text-sm mt-2">{t(lang,"job.none_hint")}</p></div>
@@ -39,9 +49,9 @@ export function JobList({ searchParams }: { searchParams: any }) {
       </div>
       <div className="space-y-4">{jobs.map((j:any)=><JobCard key={j.id} job={j}/>)}</div>
       <div className="flex items-center justify-center gap-4 mt-8">
-        <Button variant="outline" onClick={()=>{const p=new URLSearchParams(sp.toString());p.set("page",String(page-1));window.location.href=`/jobs?${p.toString()}`}} disabled={page<=1}>{t(lang,"job.previous")}</Button>
+        <Button variant="outline" onClick={()=>goToPage(page-1)} disabled={page<=1}>{t(lang,"job.previous")}</Button>
         <span className="text-sm text-muted-foreground">{t(lang,"job.page",String(page))}</span>
-        <Button variant="outline" onClick={()=>{const p=new URLSearchParams(sp.toString());p.set("page",String(page+1));window.location.href=`/jobs?${p.toString()}`}} disabled={jobs.length<20}>{t(lang,"job.next")}</Button>
+        <Button variant="outline" onClick={()=>goToPage(page+1)} disabled={jobs.length<20}>{t(lang,"job.next")}</Button>
       </div>
     </div>
   )

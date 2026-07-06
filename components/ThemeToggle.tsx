@@ -9,7 +9,7 @@ export function ThemeToggle() {
   const { lang } = useLanguage()
   return (
     <button onClick={toggle} className="p-2 rounded-lg transition-colors hover:bg-card" title={t(lang, theme === "dark" ? "theme.light" : "theme.dark")}>
-      {theme === "dark" ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-brown-700" />}
+      {theme === "dark" ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-foreground/70" />}
     </button>
   )
 }

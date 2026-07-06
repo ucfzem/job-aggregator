@@ -35,11 +35,11 @@ export function JobCard({ job }: { job: any }) {
           </div>
           <p className="text-muted-foreground text-sm mt-3 line-clamp-2">{shortDesc}</p>
           {job.technologies?.length>0&&<div className="flex flex-wrap gap-1.5 mt-3">
-            {job.technologies.slice(0,5).map((t:string)=> <span key={t} className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded-md">{t}</span>)}
+            {job.technologies.slice(0,5).map((tech:string)=> <span key={tech} className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded-md">{tech}</span>)}
             {job.technologies.length>5&&<span className="text-xs text-muted-foreground">+{job.technologies.length-5}</span>}
           </div>}
           <div className="flex gap-3 mt-4">
-            <a href={job.url} target="_blank" className="inline-flex items-center gap-1.5 bg-primary text-primary-foreground text-sm px-4 py-2 rounded-md hover:brightness-110 font-medium transition-all">{t(lang,"job.apply")} <ExternalLink className="w-3.5 h-3.5"/></a>
+            <a href={job.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 bg-primary text-primary-foreground text-sm px-4 py-2 rounded-md hover:brightness-110 font-medium transition-all">{t(lang,"job.apply")} <ExternalLink className="w-3.5 h-3.5"/></a>
             <Link href={`/job/${job.id}`} className="inline-flex items-center gap-1.5 border border-border text-muted-foreground text-sm px-4 py-2 rounded-md hover:bg-card transition-colors">{t(lang,"job.details")}</Link>
           </div>
         </div>

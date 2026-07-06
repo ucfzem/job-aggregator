@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 
 type Theme = "light" | "dark"
 
-const ThemeContext = createContext<{ theme: Theme; toggle: () => void }>({ theme: "light", toggle: () => {} })
+const ThemeContext = createContext<{ theme: Theme; toggle: () => void }>({ theme: "dark", toggle: () => {} })
 
 export function useTheme() { return useContext(ThemeContext) }
 
@@ -12,10 +12,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    const saved = (localStorage.getItem("theme") as Theme) || "dark"
+    setTheme(saved)
+    document.documentElement.classList.toggle("dark", saved === "dark")
     setMounted(true)
-    const t = (localStorage.getItem("theme") as Theme) || "dark"
-    setTheme(t)
-    document.documentElement.classList.toggle("dark", t === "dark")
   }, [])
 
   function toggle() {

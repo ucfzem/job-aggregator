@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { cookies } from "next/headers"
 import { getJobById } from "@/lib/theirstack"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -6,16 +7,18 @@ import { Card } from "@/components/ui/card"
 import { MapPin, DollarSign, Clock, Globe, ExternalLink, ArrowLeft, Building2 } from "lucide-react"
 import { t, type Lang } from "@/lib/i18n"
 
-function getLangFromCookie(cookie: string): Lang {
-  const match = cookie?.match(/lang=(\w+)/)
-  if (match && ["en","fr","es","ar"].includes(match[1])) return match[1] as Lang
+async function getLang(): Promise<Lang> {
+  try {
+    const c = await cookies()
+    const v = c.get("lang")?.value
+    if (v && ["en","fr","es","ar"].includes(v)) return v as Lang
+  } catch {}
   return "fr"
 }
 
 export default async function JobDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const job = await getJobById(id)
-  const lang = "fr"
+  const [job, lang] = await Promise.all([getJobById(id), getLang()])
   if (!job) return <main className="max-w-4xl mx-auto px-4 py-16 text-center"><h1 className="text-2xl font-bold mb-4">{t(lang,"job.not_found")}</h1><p className="text-muted-foreground mb-8">{t(lang,"job.expired")}</p><Link href="/jobs"><Button>{t(lang,"job.back_search")}</Button></Link></main>
   const daysAgo = Math.floor((Date.now() - new Date(job.posted_at).getTime()) / 86400000)
   const salaryDisplay = job.salary_min && job.salary_max ? `$${(job.salary_min/1000).toFixed(0)}k - $${(job.salary_max/1000).toFixed(0)}k` : t(lang,"job.salary_hidden")
@@ -45,7 +48,7 @@ export default async function JobDetailPage({ params }: { params: Promise<{ id: 
         </div>
         {job.technologies?.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-6">
-            {job.technologies.map((t: string) => <span key={t} className="text-sm bg-muted text-muted-foreground px-3 py-1 rounded-md">{t}</span>)}
+            {job.technologies.map((tech: string) => <span key={tech} className="text-sm bg-muted text-muted-foreground px-3 py-1 rounded-md">{tech}</span>)}
           </div>
         )}
         <div className="mb-8">
@@ -53,7 +56,7 @@ export default async function JobDetailPage({ params }: { params: Promise<{ id: 
           <div className="text-muted-foreground whitespace-pre-wrap leading-relaxed">{job.description}</div>
         </div>
         <div className="flex gap-4">
-          <a href={job.url} target="_blank" className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:brightness-110 font-medium transition-all">
+          <a href={job.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:brightness-110 font-medium transition-all">
             {t(lang,"job.apply")} <ExternalLink className="w-4 h-4" />
           </a>
         </div>
